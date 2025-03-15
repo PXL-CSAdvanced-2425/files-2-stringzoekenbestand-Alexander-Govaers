@@ -32,25 +32,44 @@ namespace WpfApp_labo_StringZoekenBestand
 
         private void openBttn_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog
+
+            try
             {
-                InitialDirectory =  Environment.CurrentDirectory,
 
-            };
-
-            if (ofd.ShowDialog() == true)
-            {
-                fileTextBox.Text = ofd.FileName;
-
-                using (StreamReader sr = new StreamReader(ofd.FileName))
+                OpenFileDialog ofd = new OpenFileDialog
                 {
-                    while (!sr.EndOfStream)
+                    InitialDirectory = Environment.CurrentDirectory,
+
+                };
+
+                if (ofd.ShowDialog() == true)
+                {
+                    fileTextBox.Text = ofd.FileName;
+
+                    using (StreamReader sr = new StreamReader(ofd.FileName))
                     {
-                        emails.Add(sr.ReadLine());
+                        while (!sr.EndOfStream)
+                        {
+                            emails.Add(sr.ReadLine());
+                        }
+                        resultTextBx.Text = sr.ReadToEnd();
                     }
-                    resultTextBx.Text = sr.ReadToEnd();
                 }
+
             }
+            catch (FileNotFoundException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+         
             
             
          
